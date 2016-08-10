@@ -1,0 +1,11 @@
+# Testing scripts
+
+docker rm -f webserver01
+docker rmi nginx:v160726
+docker build --no-cache=true -t=nginx:v160726 .
+docker create --restart=on-failure:3 --name webserver01 -i -t -h webserver01 -v /usr/local/src/nginx/webserver01/conf.d:/etc/nginx/conf.d -v /usr/local/src/nginx/webserver01/log:/var/log/nginx -v /usr/local/src/www:/usr/local/src/www -p 80:80 -p 443:443 -p 6024:22 nginx:v160726 
+docker start webserver01
+docker exec -it webserver01 bash
+docker exec -it webserver01 nginx -s reload 
+ssh root@localhost -p 9024
+
